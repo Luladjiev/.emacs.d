@@ -33,7 +33,6 @@
 
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
 
-
 ;; Set custom.el location
 (setq custom-file (concat leet-var-dir "custom.el"))
 (when (file-exists-p custom-file)
@@ -66,6 +65,10 @@
 (straight-use-package 'use-package)
 
 
+;; Better defaults
+(use-package better-defaults)
+
+
 ;; User Interface
 (defalias 'yes-or-no-p 'y-or-n-p)
 
@@ -74,13 +77,9 @@
       inhibit-startup-buffer-menu t
       inhibit-startup-screen t
       inhibit-startup-echo-area-message "locutus"
-      initial-buffer-choice t
       initial-scratch-message "")
 
 (set-face-attribute 'default nil :font "Hack-13")
-(scroll-bar-mode 0)
-(tool-bar-mode 0)
-(menu-bar-mode 0)
 (toggle-frame-maximized)
 (global-display-line-numbers-mode)
 (global-auto-revert-mode)
@@ -91,6 +90,9 @@
   (load-theme 'dracula))
 
 (use-package which-key
+  :init
+  (setq which-key-idle-delay 0.1)
+  (setq which-key-idle-secondary-delay 0.05)
   :config
   (which-key-mode))
 
@@ -140,3 +142,31 @@
   (global-set-key (kbd "M-n") 'neotree-toggle))
 
 (use-package magit)
+
+
+;; IDE like feautes
+(use-package lsp-mode
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  :hook ((python-mode . lsp)
+         (lsp-mode . lsp-enable-which-key-integration))
+  :commands lsp)
+
+(use-package lsp-ui
+  :commands lsp-ui-mode)
+
+(use-package lsp-ivy)
+
+(use-package company
+  :init
+  (global-company-mode))
+
+(use-package exec-path-from-shell
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
+
+(use-package flycheck
+  :init
+  (global-flycheck-mode))
