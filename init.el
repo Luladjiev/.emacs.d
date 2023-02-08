@@ -91,7 +91,7 @@
 
 (use-package which-key
   :init
-  (setq which-key-idle-delay 0.1)
+  (setq which-key-idle-delay 0.5)
   (setq which-key-idle-secondary-delay 0.05)
   :config
   (which-key-mode))
